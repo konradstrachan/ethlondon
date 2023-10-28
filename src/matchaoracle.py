@@ -69,10 +69,12 @@ def main():
             """
             # Ensure the asserting that is being challenge exists to be challenged
             assert self.data.ledger.contains(statement)
-            assert self.data.ledger[statement].finalised == False
-            assert self.data.ledger[statement].due < sp.now
+            
+            statement = self.data.ledger[statement]
+            assert statement.finalised == False
+            assert statement.due < sp.now
             # Cost of dispute grows based on self.dispute_minimum_multiple factor
-            number_of_disputes = len(self.data.ledger[statement].disputers)
+            number_of_disputes = len(statement.disputers)
             dispute_multiplier = number_of_disputes * self.data.dispute_minimum_multiple
             amount_required_to_dispute = number_of_disputes * dispute_multiplier
 
@@ -81,13 +83,13 @@ def main():
             assert sp.amount == sp.mutez(100) #utils.nat_to_mutez(amount_required_to_dispute)
 
             # TODO this pushes to the front of the list? Ideally stick on the back
-            self.data.ledger[statement].disputers.push(sp.sender)
+            statement.disputers.push(sp.sender)
 
             # Flip the outcome
-            self.data.ledger[statement].outcome = not self.data.ledger[statement].outcome
+            statement.outcome = not statement.outcome
 
             # Extend the window to allow for counter challenges
-            self.data.ledger[statement].due = sp.add_days(sp.now, 1)
+            statement.due = sp.add_days(sp.now, 1)
 
         @sp.entrypoint
         def finalise_assertion(self, statement):
@@ -104,28 +106,30 @@ def main():
                 statement (string): assertion
             """
             assert self.data.ledger.contains(statement)
+
+            statement = self.data.ledger[statement]
             # Ensure assertion can be finalised as the challenge window has passed
-            assert self.data.ledger[statement].due > sp.now
+            assert statement.due > sp.now
             # Check it already wasn't finalsed
-            assert self.data.ledger[statement].finalised == False
+            assert statement.finalised == False
 
-            self.data.ledger[statement].finalised = True
+            statement.finalised = True
 
-            remaining_bond = self.data.ledger[statement].bond
+            remaining_bond = statement.bond
             
             # Sweetener for whoever finalises the outcome (1% bonus)
-            if sp.sender != self.data.ledger[statement].asserter:
-                bonus = sp.split_tokens(self.data.ledger[statement].bond, 1, 100)
+            if sp.sender != statement.asserter:
+                bonus = sp.split_tokens(statement.bond, 1, 100)
                 sp.send(sp.sender, bonus)
-                remaining_bond = self.data.ledger[statement].bond - bonus
+                remaining_bond = statement.bond - bonus
             
-            if len(self.data.ledger[statement].disputers) == 0:
+            if len(statement.disputers) == 0:
                 # Assertion was not challenged, repay the bond
-                sp.send(self.data.ledger[statement].asserter, remaining_bond)
+                sp.send(statement.asserter, remaining_bond)
             else:
-                if self.data.ledger[statement].outcome == True:
+                if statement.outcome == True:
                     # Outcome true, repay bond as if no disputes occurred
-                    sp.send(self.data.ledger[statement].asserter, remaining_bond)
+                    sp.send(statement.asserter, remaining_bond)
 
                 # Since we just keep track of the order of disputes we
                 # need to infer based on the fact that each dispute changed
@@ -133,8 +137,8 @@ def main():
                 disputerVoted = False
 
                 # Return funds based on the winning outcome
-                for disputer in self.data.ledger[statement].disputers:
-                    if disputerVoted == self.data.ledger[statement].outcome:
+                for disputer in statement.disputers:
+                    if disputerVoted == statement.outcome:
                         # This disputer won, repay their bond
                         # TODO: as with the line above where we are unable
                         #       to calculate the amount, each disputer pays a
