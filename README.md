@@ -2,11 +2,15 @@
 
 This repository contains the Predictez (Predict + Tezos) project developed during the ETH London 2023 hackathon.
 
+![image](https://github.com/konradstrachan/ethlondonhackathon2023/assets/21056525/35b0d539-c4ef-4c14-9037-738442421b1e)
+
 ## Overview
 
 Predictez is a proof of concept prediction market platform built on the Tezos blockchain using [SmartPy](smartpy.io). It combines the power of prediction markets with the security and decentralization of Tezos. The platform includes two main smart contracts: **PredictezOptimisticOracle** and **PredictezPredictionMarket**. PredictezOptimisticOracle handles the assertion of any fact and dispute process to ensure truthfulness, while PredictezPredictionMarket facilitates prediction market operation and betting on facts that are asserted and finalised on the Oracle.
 
 ## PredictezOptimisticOracle
+
+![image](https://github.com/konradstrachan/ethlondonhackathon2023/assets/21056525/47e98404-160a-41f1-b497-0af9cd646be9)
 
 ### Description
 
