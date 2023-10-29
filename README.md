@@ -8,9 +8,9 @@ This repository contains the Predictez (Predict + Tezos) project developed durin
 
 Predictez is a proof of concept prediction market platform built on the Tezos blockchain using [SmartPy](smartpy.io). It combines the power of prediction markets with the security and decentralization of Tezos. The platform includes two main smart contracts: **PredictezOptimisticOracle** and **PredictezPredictionMarket**. PredictezOptimisticOracle handles the assertion of any fact and dispute process to ensure truthfulness, while PredictezPredictionMarket facilitates prediction market operation and betting on facts that are asserted and finalised on the Oracle.
 
-## PredictezOptimisticOracle
+![image](https://github.com/konradstrachan/ethlondonhackathon2023/assets/21056525/844c434a-5a9a-4e91-96dc-3bf14439f229)
 
-![image](https://github.com/konradstrachan/ethlondonhackathon2023/assets/21056525/47e98404-160a-41f1-b497-0af9cd646be9)
+## PredictezOptimisticOracle
 
 ### Description
 
