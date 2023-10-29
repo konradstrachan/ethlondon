@@ -2,7 +2,7 @@ import smartpy as sp
 
 @sp.module
 def main():
-    class MatchaPredictionMarket(sp.Contract):
+    class PredictezPredictionMarket(sp.Contract):
         """
         Prediction market that allows anyone to bet on the outcome of an event.
 
@@ -115,7 +115,7 @@ def main():
             # TODO it's not clear using inheritance or composition how this works 
             # so this logic has been mocked out for sake of completion
             # An example of how it could be called is provided
-            #MatchaOptimisticOracle.make_assertion(prediction)
+            #PredictezOptimisticOracle.make_assertion(prediction)
 
         @sp.entry_point
         def finalise_outcome(self, prediction):
@@ -141,8 +141,8 @@ def main():
             # so this logic has been mocked out for sake of completion
             # An example of how it could be called is provided
             
-            #assert MatchaOptimisticOracle.has_assertion_been_finalised() == True
-            #oo_assertion_result_final MatchaOptimisticOracle.get_assertion_result()
+            #assert PredictezOptimisticOracle.has_assertion_been_finalised() == True
+            #oo_assertion_result_final PredictezOptimisticOracle.get_assertion_result()
             oo_assertion_result_final = True
 
             # Claim assertion has now been finalised

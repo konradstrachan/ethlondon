@@ -2,7 +2,7 @@ import smartpy as sp
 
 @sp.module
 def main():
-    class MatchaOptimisticOracle(sp.Contract):
+    class PredictezOptimisticOracle(sp.Contract):
         """
         Optimistic Oracle that allows anyone to assert to a statement which may
         or may not be truthful. Anyone asserting a statement must put up a bond
@@ -212,8 +212,8 @@ if "templates" not in __name__:
     dispute_minimum_multiple = sp.nat(2)
     assertion = "The max temperature in London on the 23rd of January 2023 was 10C"
     
-    # Deploy the MatchaOptimisticOracle contract
-    contract = scenario.add_module(main.MatchaOptimisticOracle)
+    # Deploy the PredictezOptimisticOracle contract
+    contract = scenario.add_module(main.PredictezOptimisticOracle)
     
     # Test case 1: Make an assertion
     @scenario
