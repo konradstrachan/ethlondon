@@ -3,16 +3,29 @@ import smartpy as sp
 @sp.module
 def main():
     class MatchaPredictionMarket(sp.Contract):
+        """
+        XXXX
+
+        """
+                    
         def __init__(self):
             self.data.claims = {}
 
         @sp.entry_point
-        def propose_claim(self, prediction, startTime, endTime):
-            assert startTime < endTime
+        def propose_claim(self, prediction, start_time, end_time):
+            """
+            XXXX
+
+            Args:
+                prediction (string): name of market
+            """
+            assert not self.data.claims.contains(prediction)
+
+            assert start_time < end_time
 
             self.data.claims[prediction] = sp.record(
-                startTime = startTime,
-                endTime = endTime,
+                start_time = start_time,
+                end_time = end_time,
                 finalising = False,
                 finalised = False,
                 outcome = False,
@@ -23,11 +36,19 @@ def main():
 
         @sp.entry_point
         def place_bet(self, prediction, outcome):
+            """
+            XXXX
+
+            Args:
+                prediction (string): name of market
+            """
+            assert self.data.claims.contains(prediction)
+
             claim = self.data.claims[prediction]
             # Betting is not allowed yet
-            assert claim.startTime <= sp.now 
+            assert claim.start_time <= sp.now 
             # Betting has finished
-            assert claim.endTime > sp.now 
+            assert claim.end_time > sp.now 
             # Market has not yet finished
             assert claim.resolved == False
             # Bet amount must be greater than 0
@@ -45,29 +66,54 @@ def main():
 
         @sp.entry_point
         def close_market_and_assert_outcome(self, prediction):
+            """
+            XXXX
+
+            Args:
+                prediction (string): name of market
+            """
+            assert self.data.claims.contains(prediction)
+
             claim = self.data.claims[prediction]
             # Check claim is not already resolved
             assert claim.resolved == False
             # Make sure the end of the prediction period has come
-            assert sp.now > claim.endTime 
+            assert sp.now > claim.end_time 
             # Process to get outcome hasn't already begun
             assert claim.finalising == False
             
-            # TODO use OO to start a dispute window to verify the outcome
+            # use OO to start a dispute window to verify the outcome
             claim.finalising = True
+
+            # TODO it's not clear using inheritance or composition how this works 
+            # so this logic has been mocked out for sake of completion
+            # An example of how it could be called is provided
+            #MatchaOptimisticOracle.make_assertion(prediction)
 
         @sp.entry_point
         def finalise_outcome(self, prediction):
+            """
+            XXXX
+
+            Args:
+                prediction (string): name of market
+            """
+            assert self.data.claims.contains(prediction)
+
             claim = self.data.claims[prediction]
             # Make sure the end of the prediction period has come (belt and braces)
-            assert sp.now > claim.endTime 
+            assert sp.now > claim.end_time 
             # Make sure the market is waiting for the confirmed outcome
             assert claim.finalising == True
             # Check claim is not already been finalised and paid out
             assert claim.resolved == False
             
-            # TODO check outcome has been finalised in OO
-            oo_has_assertion_been_finalised = True
+            # TODO it's not clear using inheritance or composition how this works 
+            # so this logic has been mocked out for sake of completion
+            # An example of how it could be called is provided
+            
+            #assert MatchaOptimisticOracle.has_assertion_been_finalised() == True
+            #oo_assertion_result_final MatchaOptimisticOracle.get_assertion_result()
             oo_assertion_result_final = True
 
             # Claim assertion has now been finalised
@@ -97,4 +143,32 @@ def main():
 
             self.data.claims[prediction].resolved = True
 
-        # TODO VIEW METHOD
+        @sp.onchain_view()
+        def has_prediction_market(self, prediction):
+            """
+            Return whether a prediction market exists
+
+            Args:
+                prediction (string): name of market
+            """
+            return self.data.claims.contains(prediction)
+        
+        @sp.onchain_view()
+        def prediction_market_start(self, prediction):
+            """
+            Return starting time of a prediction market
+
+            Args:
+                prediction (string): name of market
+            """
+            return self.data.claims[prediction].start_time
+        
+        @sp.onchain_view()
+        def prediction_market_end(self, prediction):
+            """
+            Return ending time of a prediction market
+
+            Args:
+                prediction (string): name of market
+            """
+            return self.data.claims[prediction].end_time
