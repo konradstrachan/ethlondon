@@ -1,6 +1,9 @@
 # ETHLondon 2023 Hackathon: Predictez Project
 
-This repository contains the Predictez (Predict + Tezos) project developed during the ETH London 2023 hackathon.
+This repository contains the Predictez (Predict + Tezos) project developed during the ETH London 2023 hackathon and won the Best use of SmartPy award.
+
+![image](https://github.com/konradstrachan/ethlondonhackathon2023/assets/21056525/97c21487-8303-4a16-81ce-e857667ed3e6)
+
 
 ![image](https://github.com/konradstrachan/ethlondonhackathon2023/assets/21056525/35b0d539-c4ef-4c14-9037-738442421b1e)
 
